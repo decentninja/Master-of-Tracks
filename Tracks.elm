@@ -2,48 +2,47 @@ import Dict
 import Set
 import Graphics.Input
 
+main : Signal Element
 main = layout <~ input
 
 input : Signal [Bool]
 input = combine <| map .signal checkboxes
 
-checkboxes = map (\_->Graphics.Input.input False) (Set.toList courses)
+checkboxes : [Graphics.Input.Input Bool]
+checkboxes = map (\_->Graphics.Input.input False) courses
 
+layout : [Bool] -> Element
 layout checks = flow right [
     chooseCourses checks,
     bestTracks checks
   ]
 
+chooseCourses : [Bool] -> Element
 chooseCourses checks = let
   row (check, (checked, name)) = flow right [
       Graphics.Input.checkbox check.handle id checked,
       plainText name
     ]
-  triple = zip checkboxes <| zip checks <| Set.toList courses
-    in flow down (map row triple)
-
-bestTracks checks = let
-  test ss =
-    length <|
-      Set.toList <|
-        Set.filter (\x -> Set.member x (favorites checks)) ss
-  line (name, n) = flow right [
-      asText n,
-      plainText name
-    ]
+  triple = zip checkboxes <| zip checks <| courses
     in
-  flow down <|
-    map line <|
-      reverse . sortBy snd <|
-        Dict.toList <|
-          Dict.map test tracks
+  flow down (map row triple)
+
+bestTracks : [Bool] -> Element
+bestTracks checks = let
+  filt x = Set.member x (favorites checks)
+  amount ss = length <| Set.toList <| Set.filter filt ss
+  line (name, n) = flow right [asText n, plainText name]
+  order = reverse . sortBy snd
+    in
+  flow down <| map line <| order <| Dict.toList <| Dict.map amount tracks
 
 favorites : [Bool] -> Set.Set String
-favorites checks = Set.fromList <| map snd <| filter fst <| zip checks <| Set.toList courses
+favorites checks = Set.fromList <| map snd <| filter fst <| zip checks <| courses
 
-courses : Set.Set String
-courses = foldl Set.union Set.empty (Dict.values tracks)
+courses : [String]
+courses = concat <| map Set.toList (Dict.values tracks)
 
+tracks : Dict.Dict String (Set.Set String)
 tracks = Dict.fromList [
   ("Autonomous Systems (CSCA)", Set.fromList [
     "DD2431 Machine Learning",

@@ -163,15 +163,17 @@ Elm.Main.make = function (_elm) {
                                                                            ,"DT2212 Music Acoustics"
                                                                            ,"DT2118 Speech and Speaker Recognition"
                                                                            ,"DT2213 Musical Communication and Music Technology"]))}]));
-   var courses = A3(List.foldl,
-   Set.union,
-   Set.empty,
-   Dict.values(tracks));
+   var courses = List.concat(A2(List.map,
+   Set.toList,
+   Dict.values(tracks)));
    var favorites = function (checks) {
-      return Set.fromList(List.map(Basics.snd)(List.filter(Basics.fst)(List.zip(checks)(Set.toList(courses)))));
+      return Set.fromList(List.map(Basics.snd)(List.filter(Basics.fst)(List.zip(checks)(courses))));
    };
    var bestTracks = function (checks) {
       return function () {
+         var order = function ($) {
+            return List.reverse(List.sortBy(Basics.snd)($));
+         };
          var line = function (_v0) {
             return function () {
                switch (_v0.ctor)
@@ -181,21 +183,22 @@ Elm.Main.make = function (_elm) {
                     _L.fromArray([Text.asText(_v0._1)
                                  ,Text.plainText(_v0._0)]));}
                _E.Case($moduleName,
-               "between lines 30 and 33");
+               "on line 34, column 20 to 57");
             }();
          };
-         var test = function (ss) {
+         var filt = function (x) {
+            return A2(Set.member,
+            x,
+            favorites(checks));
+         };
+         var amount = function (ss) {
             return List.length(Set.toList(A2(Set.filter,
-            function (x) {
-               return A2(Set.member,
-               x,
-               favorites(checks));
-            },
+            filt,
             ss)));
          };
-         return Graphics.Element.flow(Graphics.Element.down)(List.map(line)(List.reverse(List.sortBy(Basics.snd)(Dict.toList(A2(Dict.map,
-         test,
-         tracks))))));
+         return Graphics.Element.flow(Graphics.Element.down)(List.map(line)(order(Dict.toList(A2(Dict.map,
+         amount,
+         tracks)))));
       }();
    };
    var checkboxes = A2(List.map,
@@ -204,10 +207,10 @@ Elm.Main.make = function (_elm) {
          return Graphics.Input.input(false);
       }();
    },
-   Set.toList(courses));
+   courses);
    var chooseCourses = function (checks) {
       return function () {
-         var triple = List.zip(checkboxes)(List.zip(checks)(Set.toList(courses)));
+         var triple = List.zip(checkboxes)(List.zip(checks)(courses));
          var row = function (_v6) {
             return function () {
                switch (_v6.ctor)
@@ -223,7 +226,7 @@ Elm.Main.make = function (_elm) {
                                       ,Text.plainText(_v6._1._1)]));}
                     break;}
                _E.Case($moduleName,
-               "between lines 18 and 21");
+               "between lines 22 and 25");
             }();
          };
          return A2(Graphics.Element.flow,
