@@ -1,28 +1,18 @@
-module Tracks where
 import Dict
 import Set
 import Graphics.Input
 
-andreasFavorites = Set.fromList [
-    "DD2458 Problem Solving and Programming under Pressure",
-    "DD2387 Program System Construction Using C++",
-    "DD2438 Artificial Intelligence and Multi Agent Systems",
-    "DD2448 Foundations of Cryptography",
-    "DD2488 Compiler Construction",
-    "DD2431 Machine Learning",
-    "EN2202 Pattern Recognition",
-    "SF1811 Optimization",
-    "EP2500 Networked Systems Security"
-  ]
-
-checkboxes = map (\_->Graphics.Input.input False) (Set.toList courses)
+main = layout <~ input
 
 input : Signal [Bool]
 input = combine <| map .signal checkboxes
 
-main = layout <~ input
-layout checks = flow right [chooseCourses checks, bestTracks checks]--, missingFromBest]
+checkboxes = map (\_->Graphics.Input.input False) (Set.toList courses)
 
+layout checks = flow right [
+    chooseCourses checks,
+    bestTracks checks
+  ]
 
 chooseCourses checks = let
   row (check, (checked, name)) = flow right [
@@ -48,11 +38,11 @@ bestTracks checks = let
         Dict.toList <|
           Dict.map test tracks
 
-courses : Set.Set String
-courses = foldl Set.union Set.empty (Dict.values tracks)
-
 favorites : [Bool] -> Set.Set String
 favorites checks = Set.fromList <| map snd <| filter fst <| zip checks <| Set.toList courses
+
+courses : Set.Set String
+courses = foldl Set.union Set.empty (Dict.values tracks)
 
 tracks = Dict.fromList [
   ("Autonomous Systems (CSCA)", Set.fromList [

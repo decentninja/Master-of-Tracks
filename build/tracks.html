@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="UTF-8"><title>tracks</title><script type="text/javascript" src="elm-runtime.js"></script><script type="text/javascript">Elm.Tracks = Elm.Tracks || {};
-Elm.Tracks.make = function (_elm) {
+<html><head><meta charset="UTF-8"><title>tracks</title><script type="text/javascript" src="elm-runtime.js"></script><script type="text/javascript">Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
    "use strict";
-   _elm.Tracks = _elm.Tracks || {};
-   if (_elm.Tracks.values)
-   return _elm.Tracks.values;
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values)
+   return _elm.Main.values;
    var _N = Elm.Native,
    _U = _N.Utils.make(_elm),
    _L = _N.List.make(_elm),
    _E = _N.Error.make(_elm),
-   $moduleName = "Tracks";
+   $moduleName = "Main";
    var Basics = Elm.Basics.make(_elm);
    var Color = Elm.Color.make(_elm);
    var Dict = Elm.Dict.make(_elm);
@@ -181,7 +181,7 @@ Elm.Tracks.make = function (_elm) {
                     _L.fromArray([Text.asText(_v0._1)
                                  ,Text.plainText(_v0._0)]));}
                _E.Case($moduleName,
-               "between lines 40 and 43");
+               "between lines 30 and 33");
             }();
          };
          var test = function (ss) {
@@ -205,11 +205,6 @@ Elm.Tracks.make = function (_elm) {
       }();
    },
    Set.toList(courses));
-   var input = Signal.combine(A2(List.map,
-   function (_) {
-      return _.signal;
-   },
-   checkboxes));
    var chooseCourses = function (checks) {
       return function () {
          var triple = List.zip(checkboxes)(List.zip(checks)(Set.toList(courses)));
@@ -228,7 +223,7 @@ Elm.Tracks.make = function (_elm) {
                                       ,Text.plainText(_v6._1._1)]));}
                     break;}
                _E.Case($moduleName,
-               "between lines 28 and 31");
+               "between lines 18 and 21");
             }();
          };
          return A2(Graphics.Element.flow,
@@ -242,28 +237,23 @@ Elm.Tracks.make = function (_elm) {
       _L.fromArray([chooseCourses(checks)
                    ,bestTracks(checks)]));
    };
+   var input = Signal.combine(A2(List.map,
+   function (_) {
+      return _.signal;
+   },
+   checkboxes));
    var main = A2(Signal._op["<~"],
    layout,
    input);
-   var andreasFavorites = Set.fromList(_L.fromArray(["DD2458 Problem Solving and Programming under Pressure"
-                                                    ,"DD2387 Program System Construction Using C++"
-                                                    ,"DD2438 Artificial Intelligence and Multi Agent Systems"
-                                                    ,"DD2448 Foundations of Cryptography"
-                                                    ,"DD2488 Compiler Construction"
-                                                    ,"DD2431 Machine Learning"
-                                                    ,"EN2202 Pattern Recognition"
-                                                    ,"SF1811 Optimization"
-                                                    ,"EP2500 Networked Systems Security"]));
-   _elm.Tracks.values = {_op: _op
-                        ,andreasFavorites: andreasFavorites
-                        ,checkboxes: checkboxes
-                        ,input: input
-                        ,main: main
-                        ,layout: layout
-                        ,chooseCourses: chooseCourses
-                        ,bestTracks: bestTracks
-                        ,courses: courses
-                        ,favorites: favorites
-                        ,tracks: tracks};
-   return _elm.Tracks.values;
-};</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Tracks)</script><noscript></noscript></body></html>
+   _elm.Main.values = {_op: _op
+                      ,main: main
+                      ,input: input
+                      ,checkboxes: checkboxes
+                      ,layout: layout
+                      ,chooseCourses: chooseCourses
+                      ,bestTracks: bestTracks
+                      ,favorites: favorites
+                      ,courses: courses
+                      ,tracks: tracks};
+   return _elm.Main.values;
+};</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Main)</script><noscript></noscript></body></html>
