@@ -162,9 +162,12 @@ Elm.Main.make = function (_elm) {
                                                                            ,"DT2212 Music Acoustics"
                                                                            ,"DT2118 Speech and Speaker Recognition"
                                                                            ,"DT2213 Musical Communication and Music Technology"]))}]));
-   var courses = List.concat(A2(List.map,
+   var unique = function (a) {
+      return Set.toList(Set.fromList(a));
+   };
+   var courses = unique(List.concat(A2(List.map,
    Set.toList,
-   Dict.values(tracks)));
+   Dict.values(tracks))));
    var favorites = function (checks) {
       return Set.fromList(List.map(Basics.snd)(List.filter(Basics.fst)(List.zip(checks)(courses))));
    };
@@ -255,6 +258,7 @@ Elm.Main.make = function (_elm) {
                       ,chooseCourses: chooseCourses
                       ,bestTracks: bestTracks
                       ,favorites: favorites
+                      ,unique: unique
                       ,courses: courses
                       ,tracks: tracks};
    return _elm.Main.values;

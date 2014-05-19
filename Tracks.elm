@@ -39,8 +39,10 @@ bestTracks checks = let
 favorites : [Bool] -> Set.Set String
 favorites checks = Set.fromList <| map snd <| filter fst <| zip checks <| courses
 
+unique a = Set.toList <| Set.fromList a
+
 courses : [String]
-courses = concat <| map Set.toList (Dict.values tracks)
+courses = unique <| concat <| map Set.toList (Dict.values tracks)
 
 tracks : Dict.Dict String (Set.Set String)
 tracks = Dict.fromList [
